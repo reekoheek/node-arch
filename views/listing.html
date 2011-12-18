@@ -1,0 +1,9 @@
+<div class="grid-top">
+    <a href="<%= url.site(locals.controller.name + '/add') %>" class="button">Add</a>
+</div>
+<div class="grid-placeholder">
+    <%- ui.grid(partial, gridOptions) %>
+</div>
+<div class="grid-bottom">
+    <%- ui.pagination(gridOptions) %>
+</div>

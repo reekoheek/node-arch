@@ -1,0 +1,27 @@
+<!doctype html>
+<html>
+    <head>
+        <title><%=title%></title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <link rel="stylesheet" href="/css/global.css" />
+        <link rel="stylesheet" href="/css/user.css" />
+        <script type="text/javascript" src="/js/jquery.tools.min.js"></script>
+        <script type="text/javascript" src="/js/xn.js"></script>
+    </head>
+    <body>
+        <nav id="layout-header">
+            <ul>
+                <li><a href="/website/index">Website Listing</a></li>
+            </ul>
+        </nav>
+        <div id="layout-body">
+            <%- ui.flash('error') %>
+            <%- ui.flash('info') %>
+
+            <%-body%>
+        </div>
+        <footer id="layout-footer">
+            Copyright &copy; 2011 <a href="http://xinix.co.id" target="blank">Xinix Technology</a>. All rights reserved.
+        </footer>
+    </body>
+</html>

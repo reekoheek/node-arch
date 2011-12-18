@@ -1,0 +1,22 @@
+<%- form.open(req) %>
+<fieldset>
+    <legend>Add <%= controller.name.humanize() %></legend>
+    <div class="two-column">
+        <% for(i in fields) { %>
+        <% if (!fields[i].isSystem) { %>
+        <div class="field-row">
+            <label><%=fields[i].name.humanize()%></label>
+            <input type="text" name="<%= fields[i].name %>" value="<%= req.form[fields[i].name] || '' %>" />
+        </div>
+        <% } %>
+        <% } %>
+    </div>
+</fieldset>
+
+<div>
+    <input type="submit" name="_" value="Save" />
+    <!--input type="submit" name="_save_continue" value="Save and Continue" /-->
+    <input type="reset" value="Reset" />
+    <a href="<%= url.site(controller.name + '/listing') %>" class="button">Back</a>
+</div>
+<%- form.close() %>

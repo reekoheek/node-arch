@@ -1,0 +1,30 @@
+<table class="grid">
+    <tr>
+        <th><input type="checkbox" /></th>
+        <% for(var i in options.fields) { %>
+        <th class="<%=options.aligns[i]%>"><%= options.fields[i].humanize() %></th>
+        <% } %>
+        <% if (options.actions) { %>
+        <th>&nbsp;</th>
+        <% } %>
+    </tr>
+    <% for(var j in options.results) { %>
+    <tr>
+        <td><input type="checkbox" /></td>
+        <% for(var i in options.fields) { %>
+        <td class="<%=options.aligns[i]%>"><%= framework.format(options.results[j][options.fields[i]], options.formats[i]) %></td>
+        <% } %>
+        <% if (options.actions) { %>
+        <td class="submenu">
+            <div style="float: right">
+                <% for(var k in options.actions) { %>
+                <span class="<%= k %>">
+                    <a href="<%= url.site(options.actions[k]) + '/' + options.results[j].id %>" title="<%= k.humanize() %>"><%= k.humanize() %></a>
+                </span>
+            <% } %>
+            </div>
+        </td>
+        <% } %>
+    </tr>
+    <% } %>
+</table>

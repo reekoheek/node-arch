@@ -1,0 +1,4 @@
+@media all {
+    .grid.debug th { text-align: left; vertical-align: top; font-weight: bold; width: 200px; }
+    .grid.debug td { text-align: left; vertical-align: top; }
+}

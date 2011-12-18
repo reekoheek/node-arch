@@ -1,0 +1,49 @@
+<fieldset class="collapsible">
+    <legend>Locals</legend>
+    <table class="grid debug">
+        <% for(var i in locals) { %>
+        <tr>
+            <th><%-i %></th>
+            <td><pre><%-locals[i]%></pre></td>
+        </tr>
+        <% } %>
+    </table>
+</fieldset>
+
+
+<fieldset class="collapsible">
+    <legend>Request</legend>
+    <table class="grid debug">
+        <% for(var i in req) { %>
+        <tr>
+            <th><%-i %></th>
+            <td><pre><%=req[i]%></pre></td>
+        </tr>
+        <% } %>
+    </table>
+</fieldset>
+
+
+<fieldset class="collapsible">
+    <legend>Response</legend>
+    <table class="grid debug">
+        <% for(var i in res) { %>
+        <tr>
+            <th><%-i %></th>
+            <td><pre><%-res[i]%></pre></td>
+        </tr>
+        <% } %>
+    </table>
+</fieldset>
+
+<fieldset class="collapsible">
+    <legend>App</legend>
+    <table class="grid debug">
+        <% for(var i in req.app) { %>
+        <tr>
+            <th><%-i %></th>
+            <td><pre><%-req.app[i]%></pre></td>
+        </tr>
+        <% } %>
+    </table>
+</fieldset>

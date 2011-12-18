@@ -1,0 +1,796 @@
+@media all {
+    * { font:12px/120% "Arimo", sans-serif; margin:0; padding:0; outline-style:none; border:none; color:#444 }
+    html, body { height:100% }
+    body { color:#f5f5f5; }
+
+    a { text-decoration:none; color:#0096C9 }
+    a:hover { color:#FF2C00 }
+    p { margin:5px 0; line-height:120% }
+
+    pre { font-family: monospace; }
+
+    fieldset { margin-bottom:10px; padding: 20px; border: 1px solid #ddd; background:#f8f8f8;  }
+    legend { 
+        font-size:1.1em; font-weight:bold; background-color:#FFB600; color:#fff; text-shadow:0 -1px 1px rgba(0,0,0,0.5); padding:4px 12px;
+        -webkit-border-radius:5px;
+        -moz-border-radius:5px;
+        -ms-border-radius:5px;
+        -o-border-radius:5px;
+        border-radius:5px
+    }
+
+    fieldset label { float:none; padding:0; color:#000; display:block; font-weight:bold; text-shadow:0 1px 1px rgba(255,255,255,0.85); line-height:27px; font-size:1.2em }
+
+    fieldset.collapsible > legend { background-color:#c33; font-size:1em; cursor: pointer } 
+    fieldset.collapsible > legend.hover { background-color:#f33 } 
+    fieldset.collapsible.clicked { background:#eee; height: 0px; overflow: hidden; }
+    fieldset.collapsible.clicked > legend { background-color:#FFB600 }
+
+    /* INPUT & TEXTAREA */
+
+    input.text,
+    input.email,
+    input.password,
+    select,
+    textarea.uniform { font-size:12px; font-family:"Helvetica Neue", Helvetica, Arial, sans-serif; font-weight:normal; padding:3px; color:#777; background:#fff url('../img/bg-input.png') repeat-x 0px 0px; border-top:solid 1px #aaa; border-left:solid 1px #aaa; border-bottom:solid 1px #ccc; border-right:solid 1px #ccc; -webkit-border-radius:3px; -moz-border-radius:3px; border-radius:3px; outline:0; min-width:310px; margin-bottom:5px}
+    div.radio { margin-bottom:8px }
+
+    input.text.hover,
+    input.email.hover,
+    input.password.hover,
+    textarea.hover {
+        border-color:#00b7ff; background:#fff url('../img/bg-input-focus.png') repeat-x 0px 0px;
+    }
+    input.text.img {
+        border-color:#00b7ff; background:#fff url('../img/bg-input-focus.png') repeat-x 40px 40px;
+    }
+    input.text:focus,
+    input.email:focus,
+    input.password:focus,
+    textarea:focus {
+        border-color:#00b7ff; background:#fff url('../img/bg-input-focus.png') repeat-x 0px 0px;
+    }
+
+    /* Input */
+    input[type="submit"],
+    input[type="reset"],
+    input[type="button"],
+    a.button {
+        color:#fff; font-size:1.1em; padding:5px 40px; background:#4587A7 url(../img/bg_button.png) 0 0 repeat-x; text-shadow:0 -1px 2px rgba(0, 0, 0, 0.85); display:inline-block; display:inline-block;
+        border-radius:3px;
+        -o-border-radius:3px;
+        -ms-border-radius:3px;
+        -moz-border-radius:3px;
+        -webkit-border-radius:3px;
+    }
+    input[type="submit"].hover,
+    input[type="reset"].hover,
+    input[type="button"].hover,
+    a.button.hover,
+    a.button:hover{
+        color:#fff; cursor:pointer; text-shadow:0 -1px 2px rgba(0, 0, 0, 0.35);
+    }
+    fieldset input[type="submit"].hover,
+    fieldset input[type="reset"].hover,
+    fieldset input[type="button"].hover,
+    fieldset a.button.hover,
+    fieldset a.button:hover{
+        background-position:0 -70px;
+    }
+    .field-row {
+        -webkit-column-break-inside: avoid;
+        break-inside: avoid;
+
+    }
+}
+
+@media screen {
+    #layout-header { background:transparent url(../img/bg_menu.png) 0 0 repeat-x; display:table; width:100%; z-index:999; position:relative; }
+    #layout-header ul { list-style:none; display:table; width:100%; height:35px; background:url(../img/bg_menu.png) 0 0 repeat-x;  }
+    #layout-header ul li { float:left; display:table; background:url(../img/bg_menu_list.png) 0 0 no-repeat; position:relative }
+    #layout-header ul ul li a { width:300px }
+    #layout-header ul li a { padding:0 20px; display:table; color:#fff; font-size:1.1em; font-weight:bold; height:35px; line-height:35px; text-shadow:none }
+    #layout-header ul li a:hover,
+    #layout-header ul li a.now { color:#fff; text-decoration:none }
+
+    #layout-body { padding: 20px; background:#f5f5f5 url(../img/bg_top.png) 0 0 repeat-x; border-bottom:1px solid #ddd }
+
+    #layout-footer { text-align:center; color:#666; text-shadow:0 1px 1px rgba(255,255,255,0.5); border-top:1px solid #fff; padding: 10px; }
+
+    table.grid { border-collapse:collapse; width:100%; border:1px solid #ccc }
+    table.grid tr { border-top:1px solid #ccc }
+    table.grid tr th { background:#eee url(../img/table-th.png) 0 bottom repeat-x; text-align: left; }
+    table.grid tr th .checker,
+    table.grid tr td .checker { margin:0 }
+    table.grid tr.odd td { background:#f9f9f9 }
+    table.grid tr.even td { background:#f5f5f5 }
+    table.grid tr.selected td { background:#fee }
+    table.grid tr.hover td { background:#eee }
+    table.grid tr.last td { border-bottom:none }
+    table.grid th { padding:10px 5px; overflow:hidden; -o-user-select:none; -moz-user-select:none; -khtml-user-select:none; -webkit-user-select:none; user-select:none }
+    table.grid th span, 
+    table.grid th a { color:#444; font-size:1.1em; font-weight:bold; display:inline-block; white-space:nowrap; text-shadow:0 1px 1px #fff }
+    table.grid th span { font-size:1em }
+    table.grid th a.asc { padding-right:18px; background:url(../img/down.png) no-repeat right }
+    table.grid th a.desc { padding-right:18px; background:url(../img/up.png) no-repeat right }
+    table.grid td { vertical-align:center; font-size:1.1em; border-bottom:1px solid #ccc; padding:7px 5px; overflow:hidden }
+    table.grid td > * { color:#333; font-size:1em; display:inline-block }
+    table.grid td > table { display:table }
+    table.grid td.last * { white-space:nowrap }
+    table.grid td.submenu {  }
+    table.grid td a *,
+    table.grid td a { text-decoration:underline }
+    table.grid td a img { padding:0 5px }
+    table.grid .x-short { width:50px }
+    table.grid .short { width:100px }
+    table.grid .medium { width:150px }
+    table.grid .wide { width:200px }
+    table.grid .auto { width:auto }
+
+    .grid-top { margin-bottom: 10px; }
+    .grid-bottom { margin-top: 10px; }
+
+    .tooltip {
+        opacity:.6 !important; padding:5px; 
+        display:none; position:absolute; color:#000; color:rgba(0,0,0,0.75) text-shadow:none; background:#ffc; padding:2px 5px; width:auto; white-space:nowrap;
+        box-shadow:0 2px 5px rgba(0,0,0,0.5);
+        -moz-box-shadow:0 2px 5px rgba(0,0,0,0.5);
+        -webkit-box-shadow:0 2px 5px rgba(0,0,0,0.5)
+    }
+
+    .left { text-align: left!important; }
+    .right { text-align: right!important; }
+
+    .two-column { -moz-column-count: 2; -moz-column-gap: 1em; -moz-column-rule: 1px solid black; -webkit-column-count: 2; -webkit-column-gap: 1em; }
+
+    pre.-debug { border: 1px solid red; padding: 10px; background:#f5f5f5 url(../img/bg_top.png) 0 0 repeat-x; margin-bottom: 10px; overflow: auto; }
+
+    .error, .info {
+        padding:5px 10px; background-color:coral; color:#fff; text-shadow:0 -1px rgba(0,0,0,0.35); margin:0 auto 5px; min-height:inherit; line-height:12px; font-size:12px; text-align:center; display:table;
+        box-shadow:0 2px 7px rgba(0,0,0,0.5);
+        -moz-box-shadow:0 2px 7px rgba(0,0,0,0.5);
+        -webkit-box-shadow:0 2px 7px rgba(0,0,0,0.5);
+        -webkit-border-radius:3px;
+        -moz-border-radius:3px;
+        border-radius:3px; width: 100%;
+    }
+    .error { border:1px solid #f00; background:#f00 }
+    .info { border:1px solid #F7CF07; margin:15px 0 }
+    .error p { padding:0px; margin-top:0px; margin-bottom:0px }
+
+    .pagination { }
+    .page-changer { float:left; min-width:260px; white-space:nowrap }
+    .page-changer ul { float:right }
+    .pagination span, 
+    .page-changer span { padding:7px 20px 5px 0 }
+    .pagination ul, 
+    .page-changer ul  { list-style:none; display:block; padding:2px; margin:0 }
+    .pagination li, 
+    .page-changer li { display:inline; margin:0; padding:0 }
+    .pagination li a, 
+    .page-changer li a { color:#fff; font-weight:bold; text-transform:lowercase; padding:3px 10px; font-weight:bold; text-decoration:none }
+    .pagination li a:hover,
+    .page-changer li a:hover { cursor:pointer }
+
+
+    .pagination li, 
+    .page-changer li,
+    .grid-top .commands-left > a,
+    .grid-top .left > a,
+    .header .right > a { 
+        margin:0; display:inline-block; float:left; background:#999 url(../img/button-gray.png) 0 bottom repeat-x; border:1px solid #666; border-left-color:#888; padding:4px 15px; text-shadow:0 -1px 1px rgba(0,0,0,0.75);
+        -webkit-border-radius:0;
+        -moz-border-radius:0;
+        -o-border-radius:0;
+        border-radius:0;
+    }
+    .pagination li, 
+    .page-changer li { padding:4px 5px }
+    .header .right > a { background:#c00 url(../img/button.png) 0 bottom repeat-x; border-color:#900; border-left-color:#d00 }
+    .pagination li.hover,
+    .page-changer li.hover,
+    .grid-top .left > a:hover,
+    .grid-top .commands-left > a:hover,
+    .header .right > a:hover { background:#666 url(../img/button-up-gray.png) 0 top repeat-x; color:#fff } 
+    .header .right > a:hover { background:#FE3232 url(../img/button-up.png) 0 top repeat-x }
+    .pagination li.first,
+    .page-changer li.first,
+    .grid-top .commands-left > a.first,
+    .grid-top .left > a.first,
+    .header .right > a.first { 
+        border-left-color:#900;
+        -webkit-border-radius:5px 0 0 5px;
+        -moz-border-radius:5px 0 0 5px;
+        -o-border-radius:5px 0 0 5px;
+        border-radius:5px 0 0 5px;
+    }
+    .pagination li.last,
+    .page-changer li.last,
+    .grid-top .commands-left > a.last,
+    .grid-top .left > a.last,
+    .header .right > a.last { 
+        -webkit-border-radius:0 5px 5px 0;
+        -moz-border-radius:0 5px 5px 0;
+        -o-border-radius:0 5px 5px 0;
+        border-radius:0 5px 5px 0;
+    }
+    .page-changer li.first.last,
+    .grid-top .commands-left > a.first.last,
+    .grid-top .left > a.first.last,
+    .header .right > a.first.last { 
+        -webkit-border-radius:5px;
+        -moz-border-radius:5px;
+        -o-border-radius:5px;
+        border-radius:5px;
+    }
+    .pagination li.selected, 
+    .page-changer li.selected { background:#666 url(../img/button-up-gray.png) 0 top repeat-x } 
+
+    .grid-bottom > .pagination { width:100%; display:table; padding:0 0 10px }
+    .grid-bottom > .pagination ul { float:right }
+
+    .pagination li, 
+    .page-changer li,
+    .grid-top .commands-left > a,
+    .grid-top .left > a,
+    .header .right > a { 
+        margin:0; display:inline-block; float:left; background:#999 url(../img/button-gray.png) 0 bottom repeat-x; border:1px solid #666; border-left-color:#888; padding:4px 15px; text-shadow:0 -1px 1px rgba(0,0,0,0.75);
+        -webkit-border-radius:0;
+        -moz-border-radius:0;
+        -o-border-radius:0;
+        border-radius:0;
+    }
+    .pagination li, 
+    .page-changer li { padding:4px 5px }
+    .header .right > a { background:#c00 url(../img/button.png) 0 bottom repeat-x; border-color:#900; border-left-color:#d00 }
+    .pagination li.hover,
+    .page-changer li.hover,
+    .grid-top .left > a:hover,
+    .grid-top .commands-left > a:hover,
+    .header .right > a:hover { background:#666 url(../img/button-up-gray.png) 0 top repeat-x; color:#fff } 
+    .header .right > a:hover { background:#FE3232 url(../img/button-up.png) 0 top repeat-x }
+    .pagination li.first,
+    .page-changer li.first,
+    .grid-top .commands-left > a.first,
+    .grid-top .left > a.first,
+    .header .right > a.first { 
+        border-left-color:#900;
+        -webkit-border-radius:5px 0 0 5px;
+        -moz-border-radius:5px 0 0 5px;
+        -o-border-radius:5px 0 0 5px;
+        border-radius:5px 0 0 5px;
+    }
+    .pagination li.last,
+    .page-changer li.last,
+    .grid-top .commands-left > a.last,
+    .grid-top .left > a.last,
+    .header .right > a.last { 
+        -webkit-border-radius:0 5px 5px 0;
+        -moz-border-radius:0 5px 5px 0;
+        -o-border-radius:0 5px 5px 0;
+        border-radius:0 5px 5px 0;
+    }
+    .page-changer li.first.last,
+    .grid-top .commands-left > a.first.last,
+    .grid-top .left > a.first.last,
+    .header .right > a.first.last { 
+        -webkit-border-radius:5px;
+        -moz-border-radius:5px;
+        -o-border-radius:5px;
+        border-radius:5px;
+    }
+    .pagination li.selected, 
+    .page-changer li.selected { background:#666 url(../img/button-up-gray.png) 0 top repeat-x } 
+}
+
+@media screen {
+    /*
+	Adding Icons
+        
+	You can add icons to the context menu by adding
+	classes to the respective LI element(s)
+    */
+
+    .submenu a { background-position: center; background-image:url(../img/cli-icon.png); }
+    .submenu .edit a, .contextMenu .edit a { background-image:url(../img/page_white_edit.png) }
+    .submenu .cut a, .contextMenu .cut a { background-image:url(../img/cut.png) }
+    .submenu .copy a, .contextMenu .copy a { background-image:url(../img/page_white_copy.png) }
+    .submenu .paste a, .contextMenu .paste a { background-image:url(../img/page_white_paste.png) }
+    .submenu .delete a, .contextMenu .delete a { background-image:url(../img/page_white_delete.png) }
+    .submenu .twitter a { background-image:url(../img/tw1.png) }
+    .submenu .detail a { background-image:url(../img/icon_view.gif) }
+    .submenu .add_image a { background-image:url(../img/icn_image.png) }
+    .submenu .print a { background-image:url(../img/print.png) }
+    .submenu .revoke a, .contextMenu .revoke a { background-image:url(../img/page_white_delete.png) }
+    .submenu .quit a, .contextMenu .quit a { background-image:url(../img/door.png) }
+    .submenu .view a, .contextMenu .view a { background-image:url(../img/icon_view.gif) }
+    .submenu .entry a, .contextMenu .entry a { background-image:url(../img/page_white_edit.png) }
+    .submenu .generate_html a { background-image:url(../img/ico_html.png) }
+    .submenu .generate_bbcode a { background-image:url(../img/ico_bbcode.jpg) }
+    .submenu .preview a { background-image:url(../img/icon_view.gif) }
+    .submenu .down a { background-image:url(../img/down.png) }
+    .submenu .up a { background-image:url(../img/up.png) }
+    .submenu .left a { background-image:url(../img/prev.gif) }
+    .submenu .right a { background-image:url(../img/next.gif) }
+
+    .submenu { text-align:center }
+    .submenu span { float:left }
+    .submenu a { width:16px; height:16px; overflow:hidden; display:block; text-indent:-9999px; margin:0 0 5px 5px }
+}
+
+@media all {
+    /*
+
+Uniform Theme:Uniform Default
+Version:1.5
+By:Josh Pyles
+License:MIT License
+---
+For use with the Uniform plugin:
+http://pixelmatrixdesign.com/uniform/
+---
+Generated by Uniform Theme Generator:
+http://pixelmatrixdesign.com/uniform/themer.html
+
+    */
+
+    /* Global Declaration */
+
+    div.selector, 
+    div.selector span, 
+    div.checker span, 
+    div.radio span, 
+    div.uploader, 
+    div.uploader span.action {
+        background-image:url(../img/sprite.png);
+        background-repeat:no-repeat;
+    }
+
+    .selector, 
+    .radio, 
+    .checker, 
+    .uploader, 
+    .selector *, 
+    .radio *, 
+    .checker *, 
+    .uploader *{
+        margin:0;
+        padding:0;
+    }
+
+    /* SPRITES */
+
+    /* Select */
+
+    div.selector {
+        background-position:-483px -130px;
+        line-height:26px;
+        height:26px;
+    }
+
+    div.selector span {
+        background-position:right 0px;
+        height:26px;
+        line-height:26px;
+    }
+
+    div.selector select {
+        /* change these to adjust positioning of select element */
+        top:0px;
+        left:0px;
+    }
+
+    div.selector:active, 
+    div.selector.active {
+        background-position:-483px -156px;
+    }
+
+    div.selector:active span, 
+    div.selector.active span {
+        background-position:right -26px;
+    }
+
+    div.selector.focus, div.selector.hover, div.selector:hover {
+        background-position:-483px -182px;
+    }
+
+    div.selector.focus span, div.selector.hover span, div.selector:hover span {
+        background-position:right -52px;
+    }
+
+    div.selector.focus:active,
+    div.selector.focus.active,
+    div.selector:hover:active,
+    div.selector.active:hover {
+        background-position:-483px -208px;
+    }
+
+    div.selector.focus:active span,
+    div.selector:hover:active span,
+    div.selector.active:hover span,
+    div.selector.focus.active span {
+        background-position:right -78px;
+    }
+
+    div.selector.disabled {
+        background-position:-483px -234px;
+    }
+
+    div.selector.disabled span {
+        background-position:right -104px;
+    }
+
+    /* Checkbox */
+
+    div.checker {
+        width:19px;
+        height:19px;
+    }
+
+    div.checker input {
+        width:19px;
+        height:19px;
+    }
+
+    div.checker span {
+        background-position:0px -260px;
+        height:19px;
+        width:19px;
+    }
+
+    div.checker:active span, 
+    div.checker.active span {
+        background-position:-19px -260px;
+    }
+
+    div.checker.focus span,
+    div.checker:hover span {
+        background-position:-38px -260px;
+    }
+
+    div.checker.focus:active span,
+    div.checker:active:hover span,
+    div.checker.active:hover span,
+    div.checker.focus.active span {
+        background-position:-57px -260px;
+    }
+
+    div.checker span.checked {
+        background-position:-76px -260px;
+    }
+
+    div.checker:active span.checked, 
+    div.checker.active span.checked {
+        background-position:-95px -260px;
+    }
+
+    div.checker.focus span.checked,
+    div.checker:hover span.checked {
+        background-position:-114px -260px;
+    }
+
+    div.checker.focus:active span.checked,
+    div.checker:hover:active span.checked,
+    div.checker.active:hover span.checked,
+    div.checker.active.focus span.checked {
+        background-position:-133px -260px;
+    }
+
+    div.checker.disabled span,
+    div.checker.disabled:active span,
+    div.checker.disabled.active span {
+        background-position:-152px -260px;
+    }
+
+    div.checker.disabled span.checked,
+    div.checker.disabled:active span.checked,
+    div.checker.disabled.active span.checked {
+        background-position:-171px -260px;
+    }
+
+    /* Radio */
+
+    div.radio {
+        width:18px;
+        height:18px;
+    }
+
+    div.radio input {
+        width:18px;
+        height:18px;
+    }
+
+    div.radio span {
+        height:18px;
+        width:18px;
+        background-position:0px -279px;
+    }
+
+    div.radio:active span, 
+    div.radio.active span {
+        background-position:-18px -279px;
+    }
+
+    div.radio.focus span, 
+    div.radio:hover span {
+        background-position:-36px -279px;
+    }
+
+    div.radio.focus:active span,
+    div.radio:active:hover span,
+    div.radio.active:hover span,
+    div.radio.active.focus span {
+        background-position:-54px -279px;
+    }
+
+    div.radio span.checked {
+        background-position:-72px -279px;
+    }
+
+    div.radio:active span.checked,
+    div.radio.active span.checked {
+        background-position:-90px -279px;
+    }
+
+    div.radio.focus span.checked, div.radio:hover span.checked {
+        background-position:-108px -279px;
+    }
+
+    div.radio.focus:active span.checked, 
+    div.radio:hover:active span.checked,
+    div.radio.focus.active span.checked,
+    div.radio.active:hover span.checked {
+        background-position:-126px -279px;
+    }
+
+    div.radio.disabled span,
+    div.radio.disabled:active span,
+    div.radio.disabled.active span {
+        background-position:-144px -279px;
+    }
+
+    div.radio.disabled span.checked,
+    div.radio.disabled:active span.checked,
+    div.radio.disabled.active span.checked {
+        background-position:-162px -279px;
+    }
+
+    /* Uploader */
+
+    div.uploader {
+        background-position:0px -297px;
+        height:28px;
+    }
+
+    div.uploader span.action {
+        background-position:right -409px;
+        height:24px;
+        line-height:24px;
+    }
+
+    div.uploader span.filename {
+        height:24px;
+        /* change this line to adjust positioning of filename area */
+        margin:2px 0px 2px 2px;
+        line-height:24px;
+    }
+
+    div.uploader.focus,
+    div.uploader.hover,
+    div.uploader:hover {
+        background-position:0px -353px;
+    }
+
+    div.uploader.focus span.action,
+    div.uploader.hover span.action,
+    div.uploader:hover span.action {
+        background-position:right -437px;
+    }
+
+    div.uploader.active span.action,
+    div.uploader:active span.action {
+        background-position:right -465px;
+    }
+
+    div.uploader.focus.active span.action,
+    div.uploader:focus.active span.action,
+    div.uploader.focus:active span.action,
+    div.uploader:focus:active span.action {
+        background-position:right -493px;
+    }
+
+    div.uploader.disabled {
+        background-position:0px -325px;
+    }
+
+    div.uploader.disabled span.action {
+        background-position:right -381px;
+    }
+
+    /* PRESENTATION */
+
+    /* Select */
+    div.selector {
+        /*margin-bottom:20px;*/
+        /*width:190px;*/
+        font-size:12px;
+    }
+
+    div.selector select {
+        width:190px;
+        font-family:"Helvetica Neue", Helvetica, Arial, sans-serif;
+        font-size:12px
+            border:solid 1px #fff;
+    }
+
+    div.selector span {
+        padding:0px 25px 0px 2px;
+        cursor:pointer;
+    }
+
+    div.selector span {
+        color:#666;
+        width:284px;
+        text-shadow:0 1px 0 #fff;
+    }
+
+    div.selector.disabled span {
+        color:#bbb;
+    }
+
+    /* Checker */
+    div.checker {
+        margin-right:10px;
+    }
+
+    /* Radio */
+    div.radio {
+        margin-right:10px;
+    }
+
+    /* Uploader */
+    div.uploader {
+        width:190px;
+        margin-bottom:20px;
+        cursor:pointer;
+    }
+
+    div.uploader span.action {
+        width:85px;
+        text-align:center;
+        text-shadow:#fff 0px 1px 0px;
+        background-color:#fff;
+        font-size:11px;
+        font-weight:bold;
+    }
+
+    div.uploader span.filename {
+        color:#777;
+        width:82px;
+        border-right:solid 1px #bbb;
+        font-size:11px;
+    }
+
+    div.uploader input {
+        width:190px;
+    }
+
+    div.uploader.disabled span.action {
+        color:#aaa;
+    }
+
+    div.uploader.disabled span.filename {
+        border-color:#ddd;
+        color:#aaa;
+    }
+    /*
+    
+    CORE FUNCTIONALITY 
+    
+    Not advised to edit stuff below this line
+    -----------------------------------------------------
+    */
+
+    .selector select:focus, .radio input:focus, .checker input:focus, uploader input:focus {
+        outline:0;
+    }
+
+    /* Select */
+
+    div.selector {
+        position:relative;
+        padding-left:10px;
+        overflow:hidden;
+    }
+
+    div.selector span {
+        display:block;
+        float:left;
+        overflow:hidden;
+        text-overflow:ellipsis;
+        white-space:nowrap;
+    }
+
+    div.selector select {
+        position:absolute;
+        opacity:0;
+        height:25px;
+        border:none;
+        background:none;
+    }
+
+    /* Checker */
+
+    div.checker {
+        position:relative;
+        float:left;
+    }
+
+    div.checker span {
+        display:block;
+        float:left;
+        text-align:center;
+    }
+
+    div.checker input {
+        opacity:0;
+        display:inline-block;
+        background:none;
+    }
+
+    /* Radio */
+
+    div.radio {
+        position:relative;
+        float:left;
+    }
+
+    div.radio span {
+        display:block;
+        float:left;
+        text-align:center;
+    }
+
+    div.radio input {
+        opacity:0;
+        text-align:center;
+        display:inline-block;
+        background:none;
+    }
+
+    /* Uploader */
+
+    div.uploader {
+        position:relative;
+        float:left;
+        overflow:hidden;
+    }
+
+    div.uploader span.action {
+        float:left;
+        display:inline;
+        padding:2px 0px;
+        overflow:hidden;
+        cursor:pointer;
+    }
+
+    div.uploader span.filename {
+        padding:0px 10px;
+        float:left;
+        display:block;
+        overflow:hidden;
+        text-overflow:ellipsis;
+        white-space:nowrap;
+    }
+
+    div.uploader input {
+        opacity:0;
+        position:absolute;
+        top:0;
+        right:0;
+        bottom:0;
+        float:right;
+        height:25px;
+        border:none;
+    }
+}
