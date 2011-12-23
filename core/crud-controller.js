@@ -8,6 +8,7 @@ var CrudController = Controller.extend({
     __register: function() {
         this.__route('listing/:offset?');
         this.__route('add', 'all');
+        this.__route('edit/:id?', 'all');
         this._super();
     },
     
@@ -88,6 +89,10 @@ var CrudController = Controller.extend({
                 next();
             });
         }
+        
+    },
+    
+    edit: function() {
         
     }
 });
