@@ -8,7 +8,8 @@ var CrudController = Controller.extend({
     __register: function() {
         this.__route('listing/:offset?');
         this.__route('add', 'all');
-        this.__route('edit/:id?', 'all');
+        this.__route('edit/:id', 'all');
+        this.__route('remove/:id/:confirmed?');
         this._super();
     },
     
@@ -43,7 +44,7 @@ var CrudController = Controller.extend({
             limit: 5,
             actions: {
                 'edit': this.name + '/edit',
-                'delete': this.name + '/delete'
+                'delete': this.name + '/remove'
             }
         };
     },
@@ -72,15 +73,18 @@ var CrudController = Controller.extend({
     add: function(req, res, next) {
         var model = Model.get(req.controller.name, req.app);
         
-        if (req.form && req.form.isValid) {
-            delete req.form['_'];
-            model.save(req.form, function(err, info) {
-                err && next(err);
+        if (req.isValid) {
+            delete req.body['_'];
+            model.save(req.body, function(err, info) {
+                if (err) { 
+                    next(err);
+                    return;
+                }
                 
                 req.flash('info', 'Adding ' + req.controller.name + ' success');
                 res.redirect('/' + req.controller.name + '/listing');
                 return;
-            });
+            }); 
         } else {
             model.fields(function(err, fields) {
                 err && next(err);
@@ -92,8 +96,54 @@ var CrudController = Controller.extend({
         
     },
     
-    edit: function() {
+    remove: function(req, res, next) {
+        if (req.params.confirmed) {
+            var model = Model.get(req.controller.name, req.app);
+            model.remove(req.params.id, function(err, info) {
+                if (err) {
+                    next(err);
+                    return;
+                }
+                req.flash('info', 'Deleting ' + req.controller.name + ' success');
+                res.redirect('/' + req.controller.name + '/listing');
+                return;
+            });
+        } else {
+            next();
+        }
+    },
+    
+    edit: function(req, res, next) {
+        var model = Model.get(req.controller.name, req.app);
         
+        if (req.isValid) {
+            delete req.body['_'];
+            
+            model.save(req.body, req.params.id, function(err, info) {
+                if (err) { 
+                    next(err);
+                    return;
+                }
+                
+                req.flash('info', 'Editing ' + req.controller.name + ' success');
+                res.redirect('/' + req.controller.name + '/listing');
+                return;
+            });
+        } else {
+            model.fields(function(err, fields) {
+                res.local('fields', fields);
+                model.get({
+                    id: req.params.id
+                }, function(err, results) {
+                    err && next(err);
+                    
+                    if (results.length === 0) next(new Error('Data not found'));
+                    
+                    req.form = results[0];
+                    next();
+                });
+            });
+        }
     }
 });
 

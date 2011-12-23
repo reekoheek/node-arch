@@ -1,18 +1,16 @@
 var Class = require('../core/class').Class;
-//var mysql = require('mysql');
-var MySQLPool = require("mysql-pool").MySQLPool;
-var ActiveRecord = require('../libraries/activerecord').ActiveRecord;
+var DB = require("../libraries/db").DB;
 
 var Model = Class.extend({
     app: null,
-    connection: null,
+    db: null,
     name: '__root',
     __fields: null,
     __sys_fields: ['id', 'active', 'created_by', 'created_time', 'updated_by', 'updated_time'],
     
     init: function(app) {
         this.app = app;
-        this.connection = Model.connection(app);
+        this.db = DB.get(app);
     },
     
     __protect: function(name) {
@@ -22,7 +20,7 @@ var Model = Class.extend({
     fields: function(cb) {
         var self = this;
         if (this.__fields === null) {
-            this.query('SELECT * FROM ' + this.__protect(this.name) + ' LIMIT 0', function(err, results, fields) {
+            this.query('SELECT * FROM ' + this.__protect(this.name), function(err, results, fields) {
                 for (var i in fields) {
                     var found = false;
                     for(var j in self.__sys_fields) {
@@ -44,29 +42,23 @@ var Model = Class.extend({
     
     query: function(sql, params, cb) {
         console.log(sql);
-        this.connection.query(sql, params, cb);
+        this.db.query(sql, params, cb);
     },
     
-    activerecord: function() {
-        return new ActiveRecord(this.connection);
+    get: function(filter, cb) {
+        this.db.record().where(filter).get(this.name, null, null, cb);
     },
 
     listing: function(offset, limit, cb) {
-        var ar = this.activerecord();
+        var ar = this.db.record();
         var sql = ar.sqlGet(this.name, offset, limit);
         var rowCountSql = ar.sqlRowCount(this.name);
         
         this.query(rowCountSql, [], function(err, results, fields) {
-            if (err) {
-                cb(err);
-                return;
-            }
+            if (err) cb(err);
             var count = results[0].count;
             this.query(sql, [], function(err, results, fields) {
-                if (err) {
-                    cb(err);
-                    return;
-                }
+                if (err) cb(err);
                 cb(err, results, fields, count);
             });
         });
@@ -104,11 +96,14 @@ var Model = Class.extend({
         this.query(sql, params, function(err, info) {
             cb && cb(err, info);
         });
+    },
+     
+    remove: function(id, cb) {
+        this.query('DELETE FROM ' + this.__protect(this.name) + ' WHERE id = ?', [id], cb);
     }
 });
 
 Model.models = {};
-Model.connections = {};
 
 Model.get =  function(name, app) {
     if (typeof(this.models[name]) === 'undefined') {
@@ -117,36 +112,5 @@ Model.get =  function(name, app) {
     }
     return this.models[name];
 };
-
-Model.connection = function(name, app) {
-    if (typeof(name) === 'object') {
-        app = name;
-        name = null;
-    }
-    var settings = app.settings.database;
-    name = name || settings['default'];
-    
-    if (!Model.connections[name]) {
-        var dbSetting = settings.config[name];
-        
-        
-        var client = new MySQLPool({
-            poolSize: dbSetting.poolSize,
-            user: dbSetting.user,
-            password: dbSetting.password,
-            database: dbSetting.database
-        });
-        
-        //        var client = mysql.createClient({
-        //            user: dbSetting.user,
-        //            password: dbSetting.password,
-        //            database: dbSetting.database
-        //        });
-        Model.connections[name] = client;
-    }
-    
-    return Model.connections[name];
-    
-}
 
 exports.Model = Model;

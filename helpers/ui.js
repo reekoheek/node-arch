@@ -47,7 +47,8 @@ var UIHelper = Helper.extend({
         if (prev < 0) prev = 0;
         
         var next = offset + limit;
-        if (next >= rowCount) next = Math.floor(rowCount / limit) * limit;
+        console.log(next);
+        if (next > rowCount - 1) next = ((Math.floor(rowCount / limit) - 1) * limit);
         
         
         var s = '<ul class="pagination">' + 

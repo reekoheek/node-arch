@@ -1,6 +1,7 @@
 var Class = require('../core/class').Class;
 
 var ActiveRecord = Class.extend({
+    connection: null,
     _select: '*',
     _from: null,
     _join: [],
@@ -8,8 +9,34 @@ var ActiveRecord = Class.extend({
     _offset: 0,
     _limit: 0,
     
+    init: function(connection) {
+        this.connection = connection;
+        this.clearCache();
+    },
+    
+    clearCache: function() {
+        this._select= '*';
+        this._from= null;
+        this._join= [];
+        this._where= [];
+        this._offset= 0;
+        this._limit= 0;
+    },
+    
     from: function(from) {
         this._from = from;
+        return this;
+    },
+    
+    where: function(filter) {
+        if (typeof filter == 'object') {
+            for (var i in filter) {
+                this._where.push([i, filter[i], 'AND']);
+            }
+        } else {
+            this._where.push(['id', filter, 'AND']);
+        }
+        return this;
     },
     
     limit: function(offset, limit) {
@@ -19,6 +46,8 @@ var ActiveRecord = Class.extend({
         }
         this._offset = offset;
         this._limit = limit;
+        
+        return this;
     },
     
     escapeIdentifier: function(name) {
@@ -48,10 +77,12 @@ var ActiveRecord = Class.extend({
         var s = '';
         for(var i in this._where) {
             var where = this._where[i];
-            if (s === '') {
+            if (s !== '') {
                 s += where[2] + ' ';
+            } else {
+                s += 'WHERE ';
             }
-            s += where[0] + '=' + where[1] + ' ';
+            s += where[0] + ' = ? ';
         }
         return s;
     },
@@ -65,6 +96,22 @@ var ActiveRecord = Class.extend({
         limit && this.limit(offset, limit);
         
         return 'SELECT ' + this.__select() + 'FROM ' + this.__from() + this.__join() + this.__where() + this.__limit();
+    },
+    
+    get: function(name, offset, limit, cb) {
+        var sql = this.sqlGet(name, offset, limit);
+        var params = [];
+        for(var i in this._where) {
+            params.push(this._where[i][1]);
+        }
+        this.query(sql, params, cb);
+    },
+    
+    query: function(sql, params, cb) {
+        console.log(sql);
+        this.connection.query(sql, params, cb);
+        
+        this.clearCache();
     },
     
     sqlRowCount: function(name) {

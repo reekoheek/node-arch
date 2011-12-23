@@ -48,8 +48,25 @@ var Controller = Class.extend({
     __handle: function(controller) {
         
         return function(req, res, next) {
-            
-            req.form || (req.form = {});
+//            if (typeof req.form !== 'undefined') {
+//                for(var i in req.form) {
+//                    req.body[i] = req.form[i];
+//                }
+//            }
+
+
+            if (req.method === 'POST') {
+                req.isValid = true;
+                if (typeof(req.form) !== 'undefined') {
+                    for(var i in req.form) {
+                        req.body[i] = req.form[i];
+                    }
+                        
+                    if (!req.form.isValid) {
+                        req.isValid = false;
+                    }
+                }
+            }
             
             var key = controller.name + '/' + req.uri.fn;
             if (typeof(controller.__viewMap[key]) === 'undefined') {

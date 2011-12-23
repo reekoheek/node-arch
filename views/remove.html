@@ -1,0 +1,7 @@
+<fieldset>
+    <legend>Remove <%= controller.name.humanize() %></legend>
+    <p>Are you sure want to delete this record?</p>
+
+</fieldset>
+<a href="<%= url.site(req.url.substr(1) + '/confirmed') %>" class="button">OK</a>
+<a href="<%= url.site(controller.name + '/listing') %>" class="button">Back</a>

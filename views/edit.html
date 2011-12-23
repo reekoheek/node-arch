@@ -1,12 +1,12 @@
 <%- form.open(req) %>
 <fieldset>
-    <legend>Add <%= controller.name.humanize() %></legend>
+    <legend>Edit <%= controller.name.humanize() %></legend>
     <div class="two-column">
         <% for(i in fields) { %>
         <% if (!fields[i].isSystem) { %>
         <div class="field-row">
             <label><%=fields[i].name.humanize()%></label>
-            <input type="text" name="<%= fields[i].name %>" value="<%= req.body[fields[i].name] || '' %>" />
+            <input type="text" name="<%= fields[i].name %>" value="<%= req.form[fields[i].name] || '' %>" />
         </div>
         <% } %>
         <% } %>
