@@ -112,6 +112,8 @@ var CrudController = Controller.extend({
     
     edit: function(id) {
         var res = this;
+        
+        if (!id) { this.next(new Error('Data empty')); return; }
         var model = Model.get(this.controller.name, this.app);
         
         if (this.req.isValid) {

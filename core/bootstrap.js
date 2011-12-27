@@ -117,26 +117,44 @@ exports.bootstrap = function() {
     });
 
     app.configure('development', function(){
+        //        app.error(function(err, req, res, next){
+        //            res.locals({
+        //                err: err
+        //            });
+        //            
+        //            if (err.is404) {
+        //                res.render('404', {
+        //                    status: 404
+        //                });
+        //            } else {
+        //                res.render('500', {
+        //                    status: 500
+        //                });
+        //            }
+        //        });
+        app.use(express.errorHandler({
+            dumpExceptions: true, 
+            showStack: true
+        }));
+    });
+
+    app.configure('production', function(){
         app.error(function(err, req, res, next){
             res.locals({
                 err: err
             });
             
             if (err.is404) {
-                res.render('404');
+                res.render('404', {
+                    status: 404
+                });
             } else {
-                res.render('500');
+                res.render('500', {
+                    status: 500
+                });
             }
         });
-    //        app.use(express.errorHandler({
-    //            dumpExceptions: true, 
-    //            showStack: true
-    //        }));
     });
-
-    app.configure('production', function(){
-        //        app.use(express.errorHandler()); 
-        });
     
     addController();
 
