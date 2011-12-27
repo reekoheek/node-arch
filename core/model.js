@@ -13,14 +13,10 @@ var Model = Class.extend({
         this.db = DB.get(app);
     },
     
-    __protect: function(name) {
-        return '`' + name + '`';
-    },
-    
     fields: function(cb) {
         var self = this;
         if (this.__fields === null) {
-            this.query('SELECT * FROM ' + this.__protect(this.name), function(err, results, fields) {
+            this.query('SELECT * FROM ' + this.db.__protect(this.name), function(err, results, fields) {
                 for (var i in fields) {
                     var found = false;
                     for(var j in self.__sys_fields) {
@@ -41,7 +37,6 @@ var Model = Class.extend({
     },
     
     query: function(sql, params, cb) {
-        console.log(sql);
         this.db.query(sql, params, cb);
     },
     
@@ -51,25 +46,27 @@ var Model = Class.extend({
 
     listing: function(offset, limit, cb) {
         var ar = this.db.record();
-        var sql = ar.sqlGet(this.name, offset, limit);
-        var rowCountSql = ar.sqlRowCount(this.name);
+        var params = [];
+        
+        var sql = ar.sqlGet(params, this.name, offset, limit);
+        var rowCountSql = ar.sqlRowCount([], this.name);
         
         this.query(rowCountSql, [], function(err, results, fields) {
-            if (err) cb(err);
+            if (err) { cb(err); return; }
+            
             var count = results[0].count;
-            this.query(sql, [], function(err, results, fields) {
-                if (err) cb(err);
+            this.query(sql, params, function(err, results, fields) {
                 cb(err, results, fields, count);
             });
         });
     },
     
     beforeSave: function(data, id) {
-        data['created_time'] = new Date();
-        data['created_by'] = 1;
+        data['updated_time'] = new Date();
+        data['updated_by'] = 1;
         if (!id) {
-            data['updated_time'] = data['created_time'];
-            data['updated_by'] = data['created_by'];
+            data['created_time'] = data['updated_time'];
+            data['created_by'] = data['updated_by'];
             
             (typeof(data['active']) === 'undefined') && (data['active'] = 1);
         }
@@ -82,24 +79,17 @@ var Model = Class.extend({
         }
         
         this.beforeSave(data, id);
-        
-        var fields = [], values = [], params = [];
-        for(var i in data) {
-            fields.push(this.__protect(i));
-            values.push('?');
-            params.push(data[i]);
+        if (id) {
+            this.db.record().where('id', id).update(this.name, data, cb);
+        } else {
+            this.db.record().insert(this.name, data, cb);
         }
-        fields = fields.join(', ');
-        values = values.join(', ');
         
-        var sql = 'INSERT INTO ' + this.__protect(this.name) + '(' + fields + ') VALUES(' + values + ')';
-        this.query(sql, params, function(err, info) {
-            cb && cb(err, info);
-        });
+        
     },
      
     remove: function(id, cb) {
-        this.query('DELETE FROM ' + this.__protect(this.name) + ' WHERE id = ?', [id], cb);
+        this.db.record().where('id', id).remove(this.name, cb);
     }
 });
 

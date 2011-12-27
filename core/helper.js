@@ -12,7 +12,7 @@ var helpers = {};
 
 Helper.register = function(name, app) {
     if (!helpers[name]) {
-//        console.log('Registering helper: ' + name);
+        
         var H = helpers[name] = require('../helpers/' + name).Helper;
         var reg = {};
         if (H.isDynamic) {

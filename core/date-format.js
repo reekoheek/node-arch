@@ -25,6 +25,9 @@ var dateFormat = function () {
 
     // Regexes and supporting functions are cached through closure
     return function (date, mask, utc) {
+        if (typeof date == 'undefined' || date == null || date == 'Invalid Date') {
+            return '';
+        }
         var dF = dateFormat;
 
         // You can't provide utc if you skip other args (use the "UTC:" mask prefix)

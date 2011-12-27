@@ -53,6 +53,14 @@ var fetchConfig = function() {
     }
 }
 
+var addController = function() {
+        
+    allFiles(__dirname + '/../controllers', function(name) {
+        require('../controllers/' + name).register(app);
+    });
+    
+}
+
 var prepareURI = function(req, res, next) {
     var segments = req.url.split('/');
     var fn = (typeof(segments[2]) === 'undefined' || segments[2] === '') ? 'index' : segments[2];
@@ -94,32 +102,43 @@ exports.bootstrap = function() {
         
         app.use(express.bodyParser());
         app.use(express.methodOverride());
-        app.use(app.router);
         app.use(express.static(__dirname + '/../public'));
+        app.use(app.router);
         
         app.use(function(req, res, next) {
             if (typeof(res.view) === 'undefined') {
-                next();
+                var error = new Error('View for "' + req.uri.segments.join('/') + '" not found');
+                error.is404 = true;
+                next(error);
             } else {
                 res.render(res.view);
             }
         });
     });
 
-    app.configure('development', function(){        
-        app.use(express.errorHandler({
-            dumpExceptions: true, 
-            showStack: true
-        })); 
+    app.configure('development', function(){
+        app.error(function(err, req, res, next){
+            res.locals({
+                err: err
+            });
+            
+            if (err.is404) {
+                res.render('404');
+            } else {
+                res.render('500');
+            }
+        });
+    //        app.use(express.errorHandler({
+    //            dumpExceptions: true, 
+    //            showStack: true
+    //        }));
     });
 
     app.configure('production', function(){
-        app.use(express.errorHandler()); 
-    });
+        //        app.use(express.errorHandler()); 
+        });
     
-    allFiles(__dirname + '/../controllers', function(name) {
-        require('../controllers/' + name).register(app);
-    });
+    addController();
 
     app.listen(app.settings.config.port);
     console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);

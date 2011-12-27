@@ -10,10 +10,12 @@ var UIHelper = Helper.extend({
         this.req = req;
         this.res = res;
         
-        var vsegments = res.view.split('/');
-        this.basePath = '';
-        for(var i = vsegments.length; i > 1; i--) {
-            this.basePath += '../';
+        if (res.view) {
+            var vsegments = res.view.split('/');
+            this.basePath = '';
+            for(var i = vsegments.length; i > 1; i--) {
+                this.basePath += '../';
+            }
         }
         
     },
@@ -47,8 +49,8 @@ var UIHelper = Helper.extend({
         if (prev < 0) prev = 0;
         
         var next = offset + limit;
-        console.log(next);
-        if (next > rowCount - 1) next = ((Math.floor(rowCount / limit) - 1) * limit);
+        
+        if (next > rowCount - 1) next = (Math.floor(rowCount / limit)) * limit;
         
         
         var s = '<ul class="pagination">' + 

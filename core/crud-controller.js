@@ -5,14 +5,6 @@ var async = require('async');
 var CrudController = Controller.extend({
     name: '__crud',
     
-    __register: function() {
-        this.__route('listing/:offset?');
-        this.__route('add', 'all');
-        this.__route('edit/:id', 'all');
-        this.__route('remove/:id/:confirmed?');
-        this._super();
-    },
-    
     __gridOptions: function(fields) {
         var f = [], ff = [], fa = [];
         
@@ -49,98 +41,100 @@ var CrudController = Controller.extend({
         };
     },
     
-    index: function(req, res) {
-        res.redirect('/' + req.uri.segments[1] + '/listing');
+    index: function() {
+        this.redirect('/' + this.req.uri.segments[1] + '/listing');
     },
     
-    listing: function(req, res, next) {
-        var model = Model.get(req.controller.name, req.app);
-        var offset = req.params.offset || 0;
+    listing: function(offset) {
+        var res = this;
+        
+        offset = offset || '0';        
+        if (isNaN(offset)) { 
+            this.redirect(this.req.uri.segments.slice(0, 3).join('/'));
+            return;
+        }
+        
+        var model = Model.get(this.controller.name, this.app);
         var limit = 5;
         model.listing(offset, limit, function(err, results, fields, rowCount) {
-            err && next(err);
+            if (err) {res.next(err); return; }
             
-            var gridOptions = req.controller.__gridOptions(fields);
+            var gridOptions = res.controller.__gridOptions(fields);
             gridOptions.offset = offset;
             gridOptions.limit = limit;
             gridOptions.results = results;
             gridOptions.rowCount = rowCount;
             res.local('gridOptions', gridOptions);
-            next();
+            res.next();
         });
     },
     
-    add: function(req, res, next) {
-        var model = Model.get(req.controller.name, req.app);
+    add: function() {
+        var res = this;
         
-        if (req.isValid) {
-            delete req.body['_'];
-            model.save(req.body, function(err, info) {
-                if (err) { 
-                    next(err);
-                    return;
-                }
+        var model = Model.get(this.controller.name, this.app);
+        
+        if (this.req.isValid) {
+            delete res.req.body['_'];
+            model.save(res.req.body, function(err, info) {
+                if (err) {res.next(err); return; }
                 
-                req.flash('info', 'Adding ' + req.controller.name + ' success');
-                res.redirect('/' + req.controller.name + '/listing');
+                res.req.flash('info', 'Adding ' + res.req.controller.name + ' success');
+                res.redirect('/' + res.req.controller.name + '/listing');
                 return;
             }); 
         } else {
             model.fields(function(err, fields) {
-                err && next(err);
+                if (err) {res.next(err); return; }
                 
                 res.local('fields', fields);
-                next();
+                res.next();
             });
         }
         
     },
     
-    remove: function(req, res, next) {
-        if (req.params.confirmed) {
-            var model = Model.get(req.controller.name, req.app);
-            model.remove(req.params.id, function(err, info) {
-                if (err) {
-                    next(err);
-                    return;
-                }
-                req.flash('info', 'Deleting ' + req.controller.name + ' success');
-                res.redirect('/' + req.controller.name + '/listing');
+    remove: function(id, confirmed) {
+        var res = this;
+        if (confirmed) {
+            var model = Model.get(this.controller.name, this.app);
+            model.remove(id, function(err, info) {
+                if (err) {res.next(err); return; }
+                
+                res.req.flash('info', 'Deleting ' + res.controller.name + ' success');
+                res.redirect('/' + res.controller.name + '/listing');
                 return;
             });
         } else {
-            next();
+            res.next();
         }
     },
     
-    edit: function(req, res, next) {
-        var model = Model.get(req.controller.name, req.app);
+    edit: function(id) {
+        var res = this;
+        var model = Model.get(this.controller.name, this.app);
         
-        if (req.isValid) {
-            delete req.body['_'];
-            
-            model.save(req.body, req.params.id, function(err, info) {
-                if (err) { 
-                    next(err);
-                    return;
-                }
+        if (this.req.isValid) {
+            delete this.req.body['_'];
+            model.save(this.req.body, id, function(err, info) {
+                if (err) {res.next(err); return; }
                 
-                req.flash('info', 'Editing ' + req.controller.name + ' success');
-                res.redirect('/' + req.controller.name + '/listing');
+                res.req.flash('info', 'Editing ' + res.controller.name + ' success');
+                res.redirect('/' + res.controller.name + '/listing');
                 return;
             });
         } else {
             model.fields(function(err, fields) {
                 res.local('fields', fields);
                 model.get({
-                    id: req.params.id
+                    id: id
                 }, function(err, results) {
-                    err && next(err);
+                    if (err) { res.next(err); return; }
                     
-                    if (results.length === 0) next(new Error('Data not found'));
+                    if (results.length === 0) { res.next(new Error('Data not found')); return; }
                     
-                    req.form = results[0];
-                    next();
+                    res.req.form = results[0];
+                    res.next();
                 });
             });
         }

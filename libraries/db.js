@@ -2,13 +2,26 @@ var MySQLPool = require('mysql-pool').MySQLPool;
 var Class = require('../core/class').Class
 var ActiveRecord = require('../libraries/activerecord').ActiveRecord;
 
-var DB = MySQLPool;
-
-DB.prototype.record = function() {
-    return new ActiveRecord(this);
-}
-
-//Class.inherits(DB, MySQLPool);
+var DB = Class.extend({
+    conn: null, 
+    
+    init: function(properties) {
+        this.conn =  new MySQLPool(properties);
+    },
+    
+    record: function() {
+        return new ActiveRecord(this);
+    },
+    
+    __protect: function(name) {
+        return '`' + name + '`';
+    },
+    
+    query: function(sql) {
+        console.log(sql);
+        this.conn.query.apply(this, arguments);
+    }
+});
 
 DB.connections = {};
 DB.get = function(name, app) {
@@ -23,19 +36,13 @@ DB.get = function(name, app) {
         var dbSetting = settings.config[name];
         
         
-        var client = new DB({
+        var instance = new DB({
             poolSize: dbSetting.poolSize,
             user: dbSetting.user,
             password: dbSetting.password,
             database: dbSetting.database
         });
-        
-        //        var client = mysql.createClient({
-        //            user: dbSetting.user,
-        //            password: dbSetting.password,
-        //            database: dbSetting.database
-        //        });
-        DB.connections[name] = client;
+        DB.connections[name] = instance;
     }
     
     return DB.connections[name];

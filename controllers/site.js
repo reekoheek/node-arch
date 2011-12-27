@@ -4,13 +4,12 @@ var Site = Controller.extend({
     name: 'site',
     
     __register: function () {
-        this.__route('/');     
-        this.__route('/site/huer');
+        this.app.get('/', this.__handle(this));
         this._super();
     },
     
-    index: function(req, res, next) {
-        next();
+    index: function() {
+        this.next();
     }
 });
 

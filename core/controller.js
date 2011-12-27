@@ -1,6 +1,14 @@
 var path = require('path');
 var async = require('async');
 var Class = require('../core/class').Class;
+var form = require('express-form').configure({
+    autoTrim: true, 
+    passThrough: true,
+    autoLocals: false,
+    dataSources: ['body']
+});
+var filter = form.filter;
+var validate = form.validate;
 
 var Controller = Class.extend({
     name: '__root',
@@ -14,47 +22,68 @@ var Controller = Class.extend({
     },
     
     __register: function() {
-        this.__route('');
-        this.__route('index');
-        this.__route('debug');
+        this.__routeValidation();
+        this.__routeAll();
     },
     
-    __route: function(orig, method, validation) {
-        
-        
-        method = method || 'get';
-        
-        var url;
-        if (orig[0] === '/') {
-            url = orig;
-        } else {
-            url = '/' + this.name + ((orig === '') ? '' : '/' + orig);
+    __routeValidation: function() {
+        for(var i in this.__validation) {
+            var actions = i.split('|');
+            
+            var formRules = [];
+            
+            for (var j in this.__validation[i]) {
+                var valRule = this.__validation[i][j];
+                
+                var label = j, rules;
+                
+                if (typeof valRule === 'string') {
+                    rules = valRule;
+                } else {
+                    valRule[1] && (label = valRule[1]);
+                    rules = valRule[0];
+                }
+                
+                rules = rules.split('|');
+                
+                var filterRule = null;
+                var validateRule = null;
+                
+                for(var k in rules) {
+                    var v = rules[k].trim();
+                    
+                    if (v.substr(0, 2) == 'f:') {
+                        filterRule || (filterRule  = filter(j));
+                        filterRule = filterRule[v.substr(2)].apply(filterRule);
+                    } else {
+                        validateRule || (validateRule = validate(j, label));
+                        
+                        var r = v.match(/^([a-zA-Z0-9]+)(\((.*)\))*$/);
+                        var fn = r[1], args;
+                        
+                        r[3] && (args = r[3].split(','));
+                        validateRule = validateRule[fn].apply(validateRule, args);
+                    }
+                }
+                
+                filterRule && formRules.push(filterRule);
+                validateRule && formRules.push(validateRule);
+                
+            }
+
+            for(var j in actions) {
+                this.app.post(new RegExp('^\\/' + this.name + '/' + actions[j]), form.apply(null, formRules));
+            }
         }
-        var s = url.split('/');
-        var fn = s[2] || 'index';
-        validation = validation || this.__validation[fn] || null;
-        
-        //        console.log('--------: (' + this.name + ') (' + orig + ')');
-        //        console.log('url     : ' + url);
-        //        console.log('fn      : ' + fn);
-        
-        
-        if (validation) {
-            this.app.post(url, validation);
-        }
-        this.app[method](url, this.__handle(this));
+    },
+    
+    __routeAll: function() {
+        this.app.all(new RegExp('^\\/' + this.name), this.__handle(this));
     },
     
     __handle: function(controller) {
         
         return function(req, res, next) {
-//            if (typeof req.form !== 'undefined') {
-//                for(var i in req.form) {
-//                    req.body[i] = req.form[i];
-//                }
-//            }
-
-
             if (req.method === 'POST') {
                 req.isValid = true;
                 if (typeof(req.form) !== 'undefined') {
@@ -82,7 +111,7 @@ var Controller = Class.extend({
                 controller.__viewMap[key] = testPath[i];
             }
             
-            if(typeof(controller[req.uri.fn]) === 'function') {
+            if(typeof(controller[req.uri.fn]) === 'function' && controller[req.uri.fn][0] !== '_'  && controller[req.uri.fn] !== 'init' && controller[req.uri.fn] !== 'constructor') {
                 res.view = controller.__viewMap[key];
                 req.controller = res.controller = controller;
                 
@@ -91,9 +120,13 @@ var Controller = Class.extend({
                     req: req, 
                     res: res
                 });
-                controller[req.uri.fn](req, res, next);
+                res.next = next;
+                
+                controller[req.uri.fn].apply(res, req.uri.segments.slice(3));
             } else {
-                next(new Error('Controller ' + controller.name + '/' + req.uri.fn + ' not found'));
+                var error = new Error('Controller "/' + controller.name + '/' + req.uri.fn + '" not found');
+                error.is404 = true;
+                next(error);
                 return;
             }
             
@@ -101,12 +134,8 @@ var Controller = Class.extend({
         
     },
     
-    debug: function(req, res, next) {
-        res.locals({
-            req: req,
-            res: res
-        });
-        next();
+    debug: function() {
+        this.next();
     }
 });
 

@@ -8,6 +8,7 @@
         <th>&nbsp;</th>
         <% } %>
     </tr>
+    <% if(options.results && options.results.length > 0) { %>
     <% for(var j in options.results) { %>
     <tr>
         <td><input type="checkbox" /></td>
@@ -21,10 +22,15 @@
                 <span class="<%= k %>">
                     <a href="<%= url.site(options.actions[k]) + '/' + options.results[j].id %>" title="<%= k.humanize() %>"><%= k.humanize() %></a>
                 </span>
-            <% } %>
+                <% } %>
             </div>
         </td>
         <% } %>
+    </tr>
+    <% } %>
+    <% } else { %>
+    <tr>
+        <td colspan="<%- options.fields.length + 2 %>" style="text-align: center">empty</td>
     </tr>
     <% } %>
 </table>
